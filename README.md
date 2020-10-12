@@ -3,6 +3,8 @@
 > Conversor de moedas consumindo o serviço do Banco Central do Brasil.
 
 ## Build Setup
+  
+Garanta que possui Node.js, Vue e vue-cli instalados.  
 
 ``` bash
 # install dependencies
