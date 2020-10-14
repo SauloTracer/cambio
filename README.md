@@ -10,9 +10,9 @@ convertido para a moeda fim.
 ## Status
 
 Incompleto. Embora o prazo em tempo corrido tenha sido adequado, meu tempo disponível para o desenvolvimento do projeto se viu prejudicado por fatores externos de cunho pessoal.  
->> Montei uma api simples node/express para mediar a comunicação com a api do BCB.  
->> Dividi a mesma em alguns módulos para melhor organizar o código e isolar as responsabilidades de cada entidade.  
->> Montei um método de teste de caixa preta bem básico para testar as saídas de cada endpoint da entidade "Coin".  
+>* Montei uma api simples node/express para mediar a comunicação com a api do BCB.  
+>* Dividi a mesma em alguns módulos para melhor organizar o código e isolar as responsabilidades de cada entidade.  
+>* Montei um método de teste de caixa preta bem básico para testar as saídas de cada endpoint da entidade "Coin".  
   
 A idéia era montar a interface utilizando o vue criando um componente para a combo de moedas, utilizando o vue-datepicker pra manipulação das datas, etc, mas não cheguei nem a tocar na view. Vou tentar subir pro github um projeto no qual o vue.js foi utilizado para a montagem.  
 
@@ -33,10 +33,10 @@ Cotação de Venda CADBRL = Cotação USDBRL de Venda ÷ Paridade USDCAD de Comp
 
 ## Endpoints
 
->> http://localhost:3000/api/coins Lista as moedas disponíveis no serviço de cotação do BCB  
->> http://localhost:3000/api/coins/XXX Recupera as informações de uma moeda específica utilizando o código de 3 letras Ex.: 'EUR'
->> http://localhost:3000/api/price/:coin/:day Recupera a última cotação disponível da moeda informada no dia informado, se existir.  
->> http://localhost:3000/api/dummyTest Ensaio de teste  
+>- http://localhost:3000/api/coins Lista as moedas disponíveis no serviço de cotação do BCB  
+>- http://localhost:3000/api/coins/XXX Recupera as informações de uma moeda específica utilizando o código de 3 letras Ex.: 'EUR'
+>- http://localhost:3000/api/price/:coin/:day Recupera a última cotação disponível da moeda informada no dia informado, se existir.  
+>- http://localhost:3000/api/dummyTest Ensaio de teste  
 
 ## Build Setup
   
