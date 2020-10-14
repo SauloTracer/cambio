@@ -15,11 +15,11 @@ function listCoins(res) {
 		resp.on('end', () => {
 			data = JSON.parse(data);
 			res.send(
-				data.value.map((x) => {
+				data.value.map((coin) => {
 					return {
-						symbol: x.simbolo, 
-						name: x.nomeFormatado, 
-						type: x.tipoMoeda
+						symbol: coin.simbolo, 
+						name: coin.nomeFormatado, 
+						type: coin.tipoMoeda
 					}; 
 				})
 			);
@@ -48,11 +48,11 @@ function getCoin(id, res) {
 			
 			//verificar se retornou algum elemento no array (se alguma moeda com esse id/simbolo foi encontrada)
 			if (data.value.length > 0) {
-				let x = data.value[0];
+				let coin = data.value[0];
 				res.send({
-						symbol: x.simbolo, 
-						name: x.nomeFormatado, 
-						type: x.tipoMoeda
+						symbol: coin.simbolo, 
+						name: coin.nomeFormatado, 
+						type: coin.tipoMoeda
 					});
 			} else {
 				res.status(204).send("Moeda não encontrada");
