@@ -33,20 +33,25 @@ function listCoins(res) {
 
 function getCoin(id, res) {
 
+	//TODO: Verificar se está vazio
+	//TODO: Validar id
+	//if valid(id) {
+	//else {
+	//  res.status(400).send('O valor informado deve ser uma string em caixa alta com 3 caracteres.');
+	//}
+
 	id = id.toUpperCase();
 	let method = `Moedas?$top=100&$filter=simbolo%20eq%20'${id}'&$format=json`;
 	let endpoint = config.apiServer + method;
 
 	https.get(endpoint, (resp) => {
 		let data = '';
-
 		resp.on('data', (chunk) => data += chunk);
 
-		// The whole response has been received. Print out the result.
 		resp.on('end', () => {
 			data = JSON.parse(data);
 			
-			//verificar se retornou algum elemento no array (se alguma moeda com esse id/simbolo foi encontrada)
+			//verifica se retornou algum elemento no array (se alguma moeda com esse id/simbolo foi encontrada)
 			if (data.value.length > 0) {
 				let coin = data.value[0];
 				res.send({

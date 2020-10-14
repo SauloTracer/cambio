@@ -1,7 +1,9 @@
-const config = require('./modules/config');
-const coin = require('./modules/coin');
 const express = require('express');
 const pretty = require('express-prettify');
+
+const config = require('./modules/config');
+const coin = require('./modules/coin');
+const price = require('./modules/price');
 const test = require('./modules/test')
 
 //Recupera a porta das variáveis de ambiente
@@ -18,18 +20,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/coins', (req, res) => {
-	//TODO: Verificar se está vazio
 	coin.listCoins(res);
 });
 
 app.get('/api/coins/:id', (req, res) => {
-	//TODO: Verificar se está vazio
-	//TODO: Validar id
-	//if valid(id) {
 	coin.getCoin(req.params.id, res);
-	//else {
-	//  res.status(400).send('O valor informado deve ser uma string em caixa alta com 3 caracteres.');
-	//}
+});
+
+app.get('/api/price/:coin/:day', (req, res) => {
+	price.getPrice(req.params.coin, req.params.day, res);
 });
 
 app.get('/api/dummyTest', (req, res) => {
