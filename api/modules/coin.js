@@ -2,36 +2,42 @@ const config = require('./config');
 const https = require('https');
 
 //Lista todas as moedas conhecidas pelo serviço
-function listCoins(res) {
+function listCoins() {
 	let method = 'Moedas?$top=100&$format=json'
 	let endpoint = config.apiServer + method;
 
-	https.get(endpoint, (resp) => {
-		let data = '';
+	return new Promise((resolve, reject) => {
+		https.get(endpoint, (resp) => {
+			let data = '';
 
-		resp.on('data', (chunk) => data += chunk);
+			resp.on('data', (chunk) => data += chunk);
 
-		// The whole response has been received. Print out the result.
-		resp.on('end', () => {
-			data = JSON.parse(data);
-			res.send(
-				data.value.map((coin) => {
-					return {
-						symbol: coin.simbolo, 
-						name: coin.nomeFormatado, 
-						type: coin.tipoMoeda
-					}; 
-				})
-			);
+			// The whole response has been received. Print out the result.
+			resp.on('end', () => {
+				try {
+					data = JSON.parse(data);
+					resolve(
+						data.value.map((coin) => {
+							return {
+								symbol: coin.simbolo, 
+								name: coin.nomeFormatado, 
+								type: coin.tipoMoeda
+							}; 
+						})
+					);
+				} catch(err) {
+					reject('Erro ao recuperar a lista de moedas. Serviço não disponível.');
+				}
+			});
+			
+			resp.on("error", (err) => {
+				reject(err);
+			});	
 		});
-		
-		resp.on("error", (err) => {
-			res.status(500).send("ERRO: Serviço indisponível.");
-		});	
 	});
 }
 
-function getCoin(id, res) {
+function getCoin(id) {
 
 	//TODO: Verificar se está vazio
 	//TODO: Validar id
@@ -44,30 +50,37 @@ function getCoin(id, res) {
 	let method = `Moedas?$top=100&$filter=simbolo%20eq%20'${id}'&$format=json`;
 	let endpoint = config.apiServer + method;
 
-	https.get(endpoint, (resp) => {
-		let data = '';
-		resp.on('data', (chunk) => data += chunk);
+	return new Promise((resolve, reject) => {
+		https.get(endpoint, (resp) => {
+			let data = '';
+			resp.on('data', (chunk) => data += chunk);
 
-		resp.on('end', () => {
-			data = JSON.parse(data);
+			resp.on('end', () => {
+				try{
+					data = JSON.parse(data);
+					
+					//verifica se retornou algum elemento no array (se alguma moeda com esse id/simbolo foi encontrada)
+					if (data.value.length > 0) {
+						let coin = data.value[0];
+						resolve({
+							symbol: coin.simbolo, 
+							name: coin.nomeFormatado, 
+							type: coin.tipoMoeda
+						});
+					} else {
+						reject({ status: 404, message: "Moeda não encontrada" })
+					}
+				} catch (err) {
+					reject({ status: 500, message: "Erro ao buscar moeda." })
+				}
+			});
 			
-			//verifica se retornou algum elemento no array (se alguma moeda com esse id/simbolo foi encontrada)
-			if (data.value.length > 0) {
-				let coin = data.value[0];
-				res.send({
-						symbol: coin.simbolo, 
-						name: coin.nomeFormatado, 
-						type: coin.tipoMoeda
-					});
-			} else {
-				res.status(204).send("Moeda não encontrada");
-			}
+			resp.on("error", (err) => {
+				reject({ status: 500, message: "ERRO: Serviço indisponível." })
+			});	
 		});
-		
-		resp.on("error", (err) => {
-			res.send("ERRO: Serviço indisponível.");
-		});	
 	});
+	
 }
 
 module.exports = {

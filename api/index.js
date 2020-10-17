@@ -20,11 +20,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/coins', (req, res) => {
-	coin.listCoins(res);
+	coin.listCoins()
+	.then(coins => res.send(coins))
+	.catch(err => res.status(500).send(err));
 });
 
 app.get('/api/coins/:id', (req, res) => {
-	coin.getCoin(req.params.id, res);
+	coin.getCoin(req.params.id)
+	.then(coin => res.send(coin))
+	.catch(err => res.status(err.status).send(err.message));
 });
 
 app.get('/api/price/:coin/:day', (req, res) => {
