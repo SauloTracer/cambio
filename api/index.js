@@ -22,17 +22,22 @@ app.get('/', (req, res) => {
 app.get('/api/coins', (req, res) => {
 	coin.listCoins()
 	.then(coins => res.send(coins))
-	.catch(err => res.status(500).send(err));
+	.catch(e => res.status(500).send(e));
 });
 
 app.get('/api/coins/:id', (req, res) => {
 	coin.getCoin(req.params.id)
 	.then(coin => res.send(coin))
-	.catch(err => res.status(err.status).send(err.message));
+	.catch(e => res.status(e.status).send(e.message));
 });
 
 app.get('/api/price/:coin/:day', (req, res) => {
-	price.getPrice(req.params.coin, req.params.day, res);
+	price.getPrice(req.params.coin, req.params.day)
+	.then(price => res.send(price))
+	.catch(e => {
+		res.status(e.status || 500).send(e.message);
+		console.log(e.error);
+	});
 });
 
 app.get('/api/dummyTest', (req, res) => {
